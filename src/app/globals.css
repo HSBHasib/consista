@@ -1,2 +1,29 @@
 @import "tailwindcss";
-@import "@heroui/styles"; 
+@import "@heroui/styles";
+
+@theme {
+  --color-parchment: #f5ebe390;
+  --color-surface: #ffffff;
+  --color-fg: #2c2825;
+  --color-muted: #8a8480;
+  --color-border: #e8e2da;
+  --color-accent: #c47a3a;
+  --color-accent-soft: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  --color-success: #5a9a6e;
+  --color-success-soft: color-mix(in srgb, var(--color-success) 12%, transparent);
+  --color-missed: #c4665a;
+  --color-missed-soft: color-mix(in srgb, var(--color-missed) 50%, transparent);
+  --color-bronze: #a0522d;
+  --color-gold: #b8860b;
+  --color-fg-soft: color-mix(in srgb, var(--color-fg) 5%, transparent);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-parchment);
+  color: var(--color-fg);
+}
+
