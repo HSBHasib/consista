@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { MotionDiv } from "@/components/motion/Motion-div";
 import { features } from "@/data/landing.data";
 
@@ -32,9 +33,13 @@ export function CoreFeaturesSection() {
               transition={{ duration: 0.4, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
               className="group"
             >
-              <div className="mb-5 grid h-10 w-10 place-items-center rounded-[10px] border border-border text-accent transition-colors group-hover:border-accent/30">
+              <motion.div
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                className="mb-5 grid h-10 w-10 place-items-center rounded-[10px] border border-border text-accent transition-all duration-300 group-hover:border-accent/30 group-hover:shadow-sm"
+              >
                 <feature.icon className="h-5 w-5" />
-              </div>
+              </motion.div>
               <h3 className="mb-1.5 text-base font-semibold text-fg">{feature.title}</h3>
               <p className="text-[15px] leading-relaxed text-muted">{feature.description}</p>
             </MotionDiv>

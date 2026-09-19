@@ -1,9 +1,21 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { MotionDiv } from "@/components/motion/Motion-div";
 import { horizons } from "@/data/landing.data";
 
+const blockContainer = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.03, delayChildren: 0.15 },
+  },
+};
 
+const block = {
+  hidden: { opacity: 0, scale: 0.5 },
+  show: { opacity: 1, scale: 1, transition: { duration: 0.3, ease: "easeOut" as const } },
+};
 
 export function TimeHorizonsSection() {
   return (
@@ -38,16 +50,24 @@ export function TimeHorizonsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.4, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="group flex flex-col justify-between rounded-3xl border border-border/85 bg-surface/60 p-7 text-center transition-all duration-300 hover:border-accent/40 hover:shadow-sm"
+              className="group flex flex-col justify-between rounded-3xl border border-border/85 bg-surface/50 p-7 text-center transition-all duration-300 hover:border-accent/40 hover:shadow-sm hover:-translate-y-0.5"
             >
               <div>   
-                <div className="mb-7 flex h-30 items-center justify-center rounded-2xl bg-[#faf6f0]/75 p-5">
+                <div className="mb-7 flex h-30 items-center justify-center rounded-2xl bg-[#faf6f0]/60 shadow-sm p-5">
                   {item.previewType === "daily" && (
-                    <div className="flex items-center gap-2">
+                    <motion.div
+                      variants={blockContainer}
+                      initial="hidden"
+                      whileInView="show"
+                      viewport={{ once: true }}
+                      className="flex items-center gap-2 "
+                    >
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <div
+                        <motion.div
                           key={i}
-                          className={`h-4 w-4 rounded-sm transition-colors ${
+                          variants={block}
+                          whileHover={{ scale: 1.2 }}
+                          className={`h-4 w-4 rounded-sm transition-colors cursor-pointer ${
                             i < 4
                               ? "bg-success/70"
                               : i === 4
@@ -56,31 +76,47 @@ export function TimeHorizonsSection() {
                           }`}
                         />
                       ))}
-                    </div>
+                    </motion.div>
                   )}
 
                   {item.previewType === "monthly" && (
-                    <div className="grid grid-cols-10 gap-1.5">
+                    <motion.div
+                      variants={blockContainer}
+                      initial="hidden"
+                      whileInView="show"
+                      viewport={{ once: true }}
+                      className="grid grid-cols-10 gap-1.5 cursor-pointer"
+                    >
                       {Array.from({ length: 30 }).map((_, i) => (
-                        <div
+                        <motion.div
                           key={i}
+                          variants={block}
+                          whileHover={{ scale: 1.2 }}
                           className={`h-3 w-3 rounded-xs ${
                             i < 27 ? "bg-success/70" : "bg-border/50"
                           }`}
                         />
                       ))}
-                    </div>
+                    </motion.div>
                   )}
 
                   {item.previewType === "yearly" && (
-                    <div className="grid grid-cols-4 gap-2.5">
+                    <motion.div
+                      variants={blockContainer}
+                      initial="hidden"
+                      whileInView="show"
+                      viewport={{ once: true }}
+                      className="grid grid-cols-4 gap-2.5 cursor-pointer"
+                    >
                       {Array.from({ length: 12 }).map((_, i) => (
-                        <div
+                        <motion.div
                           key={i}
+                          variants={block}
+                          whileHover={{ scale: 1.15 }}
                           className="h-6 w-6 rounded-sm bg-success/70 shadow-xs"
                         />
                       ))}
-                    </div>
+                    </motion.div>
                   )}
                 </div>
 

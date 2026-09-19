@@ -36,14 +36,14 @@ export function HowItWorksSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.4, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className="group relative flex flex-col justify-between rounded-2xl border border-border/70 bg-[#faf6f0]/80 p-6 transition-all duration-300 hover:border-accent/50 hover:bg-[#faf6f0] shadow"
+              className="group relative flex flex-col justify-between rounded-2xl border border-border/70 bg-[#faf6f0]/80 p-6 transition-all duration-300 hover:border-accent/50 hover:bg-[#faf6f0] hover:-translate-y-0.5 hover:shadow-md shadow"
             >
               <div>
                 <div className="mb-5 flex items-center justify-between">
                   <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent-soft text-xs font-bold text-accent">
                     {String(index + 1).padStart(2, '0')}
                   </span>
-                  <span className="text-xs font-mono text-muted/60">
+                  <span className="text-xs text-muted/60">
                     Phase {index + 1}
                   </span>
                 </div>

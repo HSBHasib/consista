@@ -16,10 +16,10 @@ export function LeaderboardSection() {
             className="flex flex-col gap-8"
           >
             <div>
-              <p className="mb-5 font-[var(--font-mono)] text-xs font-semibold uppercase tracking-[0.08em] text-accent">
+              <p className="mb-5 text-xs font-semibold uppercase tracking-[0.08em] text-accent">
                 Community
               </p>
-              <h2 className="font-[var(--font-display)] text-[clamp(28px,3.5vw,42px)] font-semibold leading-[1.1] tracking-[-0.015em] text-fg">
+              <h2 className="text-[clamp(28px,3.5vw,42px)] font-semibold leading-[1.1] tracking-[-0.015em] text-fg">
                 Yearly Top 10 Leaderboard
               </h2>
             </div>
@@ -38,11 +38,11 @@ export function LeaderboardSection() {
             {leaderboardEntries.map((entry) => (
               <div
                 key={entry.rank}
-                className="grid items-center gap-4 border-b border-border px-6 py-4 last:border-b-0"
+                className="grid items-center gap-4 border-b border-border px-6 py-4 last:border-b-0 transition-colors duration-200 hover:bg-fg-soft/50"
                 style={{ gridTemplateColumns: "40px 1fr auto" }}
               >
                 <span
-                  className={`font-[var(--font-display)] text-xl font-bold ${
+                  className={`text-xl font-bold ${
                     entry.rankClass === "gold"
                       ? "text-[color-mix(in_srgb,var(--color-accent)_60%,#b8860b)]"
                       : entry.rankClass === "silver"
@@ -57,7 +57,7 @@ export function LeaderboardSection() {
                 <span className={`font-medium ${entry.name === "You" ? "text-success font-semibold" : "text-fg"}`}>
                   {entry.name}
                 </span>
-                <span className="font-[var(--font-mono)] text-sm font-semibold text-accent">
+                <span className="text-sm font-semibold text-accent">
                   {entry.score}
                 </span>
               </div>
@@ -68,3 +68,4 @@ export function LeaderboardSection() {
     </section>
   );
 }
+

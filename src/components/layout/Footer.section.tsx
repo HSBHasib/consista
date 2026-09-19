@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { HiOutlineCommandLine } from "react-icons/hi2";
 import { footerColumns } from "@/data/landing.data";
+import { MotionDiv } from "@/components/motion/Motion-div";
 
 export function Footer() {
   return (
@@ -8,7 +11,13 @@ export function Footer() {
       id="contact"
       className="border-t border-border py-14 text-[13px] text-muted"
     >
-      <div className="mx-auto max-w-295 px-8">
+      <MotionDiv
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="mx-auto max-w-295 px-8"
+      >
         {/* Responsive grid for mobile/tablet, shifting to flex-wrap on large screens */}
         <div className="mb-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex lg:flex-wrap lg:justify-between gap-10">
           
@@ -61,7 +70,7 @@ export function Footer() {
             Built for consistency & productivity.
           </span>
         </div>
-      </div>
+        </MotionDiv>
     </footer>
   );
 }

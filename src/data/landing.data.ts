@@ -179,9 +179,7 @@ export const footerColumns: readonly FooterColumn[] = [
   },
 ] as const;
 
-
-
 export const leaderboardEntries: LeaderboardEntry[] = [
   { rank: 1, name: 'Alex Rivera', score: 98, tier: 'gold', rankClass: 'text-[#b8860b]' },
-  // বাকি আইটেমগুলো...
 ];
+

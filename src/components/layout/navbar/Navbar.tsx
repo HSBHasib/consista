@@ -3,10 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
-import {
-  HiOutlineBars3,
-  HiOutlineCommandLine,
-} from "react-icons/hi2";
+import { HiOutlineBars3, HiOutlineCommandLine } from "react-icons/hi2";
 import { Button } from "@heroui/react";
 import { useSession } from "@/lib/auth-client";
 import { navLinks } from "@/data/landing.data";
@@ -51,7 +48,6 @@ export function ThemeToggle({
   );
 }
 
-
 // ============================
 // Theme Initialization
 // ============================
@@ -60,7 +56,6 @@ function getInitialTheme(): Theme {
   return (localStorage.getItem("consista-theme") as Theme) || "warm";
 }
 
-
 // ============================
 // Main Navbar Component
 // ============================
@@ -68,8 +63,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
   const pathname = usePathname();
-  const { data: session } = useSession();
-
+  const { data: session, isPending } = useSession();
 
   // ===============================
   // Theme toggle function
@@ -81,7 +75,6 @@ export function Navbar() {
       return next;
     });
   }, []);
-
 
   // ===============================
   // Mobile Menu Effect
@@ -115,30 +108,35 @@ export function Navbar() {
           </span>
         </Link>
 
-
         {/* ============================ */}
         {/* Desktop Navigation (hidden below lg) */}
         {/* ============================ */}
         <div className="hidden items-center gap-4 lg:flex">
-          <ul className="flex items-center gap-1">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className={`px-4 py-2 text-sm font-medium transition-colors rounded-lg ${
-                      isActive
-                        ? "text-fg font-semibold bg-accent/10"
-                        : "text-muted hover:text-fg"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              );
-            })}
-            {session && (
+          <ul className="flex items-center gap-2">
+            {isPending
+              ? Array.from({ length: 3 }).map((_, i) => (
+                  <li key={i}>
+                    <div className="h-9 w-20 rounded-xl bg-fg-soft animate-pulse" />
+                  </li>
+                ))
+              : navLinks.map((link) => {
+                  const isActive = pathname === link.href;
+                  return (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className={`px-4 py-2 text-sm font-medium transition-colors rounded-lg ${
+                          isActive
+                            ? "text-fg font-semibold bg-accent/10"
+                            : "text-muted hover:text-fg"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  );
+                })}
+            {!isPending && session && (
               <li>
                 <Link
                   href="/dashboard"
@@ -157,13 +155,17 @@ export function Navbar() {
           {/* Vertical Divider */}
           <span className="text-border">|</span>
 
-
           {/* ============================ */}
           {/* Desktop User Area */}
           {/* ============================ */}
           <div className="flex items-center gap-3">
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
-            {session ? (
+            {isPending ? (
+              <div className="flex items-center gap-2">
+                <div className="h-9 w-20 rounded-xl bg-fg-soft animate-pulse" />
+                <div className="h-9 w-24 rounded-xl bg-accent/20 animate-pulse" />
+              </div>
+            ) : session ? (
               <Link href="/dashboard">
                 <Button variant="primary" className="bg-accent text-white">
                   Dashboard
@@ -172,12 +174,18 @@ export function Navbar() {
             ) : (
               <>
                 <Link href="/signin">
-                  <Button variant="ghost" className="text-fg hover:bg-muted/13 transition-colors duration-100 rounded-xl">
+                  <Button
+                    variant="ghost"
+                    className="text-fg hover:bg-muted/13 transition-colors duration-100 rounded-xl"
+                  >
                     Sign In
                   </Button>
                 </Link>
                 <Link href="/signup">
-                  <Button variant="primary" className="bg-accent/90 text-white rounded-xl">
+                  <Button
+                    variant="primary"
+                    className="bg-accent/90 text-white rounded-xl"
+                  >
                     Get Started
                   </Button>
                 </Link>
@@ -199,7 +207,6 @@ export function Navbar() {
           </button>
         </div>
       </nav>
-
 
       {/* ============================ */}
       {/* Mobile Drawer */}

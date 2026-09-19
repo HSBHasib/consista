@@ -2,17 +2,42 @@
 
 import Link from "next/link";
 import { Button } from "@heroui/react";
+import { motion } from "framer-motion";
 import { MotionDiv } from "@/components/motion/Motion-div";
 import { heroData, dashboardMockData } from "@/data/landing.data";
 import { getDynamicDashboardData } from "@/utils/dashboard";
 
+const titleWords = heroData.title.split(" ");
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15, delayChildren: 0.30 },
+  },
+};
+
+const word = {
+  hidden: { opacity: 0, y: 12, filter: "blur(4px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+  },
+};
+
 export function HeroSection() {
+  // =============================
+  // Fetch Dynamic Dashboard Data
+  // =============================
   const dynamicInfo = getDynamicDashboardData("Hasib");
   const UserData = {
     ...dashboardMockData,
     greeting: dynamicInfo.greeting,
     date: dynamicInfo.date,
   };
+
 
   return (
     <section className="py-[clamp(60px,10vw,70px)]">
@@ -30,9 +55,22 @@ export function HeroSection() {
             <p className="mb-5 text-xs font-semibold uppercase tracking-[0.08em] text-accent">
               {heroData.tagline}
             </p>
-            <h1 className="text-[clamp(40px,5.5vw,58px)] font-semibold leading-[1.02] tracking-[-0.02em] text-fg">
-              {heroData.title}
-            </h1>
+            <motion.h1
+              variants={container}
+              initial="hidden"
+              animate="show"
+              className="text-[clamp(40px,5.5vw,50px)] font-semibold leading-[1.02] tracking-[-0.02em] text-fg"
+            >
+              {titleWords.map((w, i) => (
+                <motion.span
+                  key={i}
+                  variants={word}
+                  className="mr-[0.3em] inline-block"
+                >
+                  {w}
+                </motion.span>
+              ))}
+            </motion.h1>
             <p className="mt-5 max-w-[60ch] text-[18px] leading-relaxed text-muted">
               {heroData.lead}
             </p>
@@ -71,7 +109,7 @@ export function HeroSection() {
               delay: 0.15,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="rounded-2xl border border-border bg-surface/50 p-6 shadow-[0_8px_32px_rgba(44,40,37,0.06)]"
+            className="rounded-2xl border border-border bg-surface/40 p-6 shadow-[0_8px_32px_rgba(44,40,37,0.06)]"
           >
             <div className="mb-5 flex items-center justify-between border-b border-border pb-4">
               <div>

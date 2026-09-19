@@ -16,7 +16,7 @@ export function BehavioralInsightsSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="rounded-2xl border border-border bg-surface/50 p-10"
+            className="rounded-2xl border border-border bg-surface/40 p-10"
           >
             <div className="relative mx-auto aspect-square max-w-70">
               <svg viewBox="0 0 280 280" fill="none" className="h-full w-full">

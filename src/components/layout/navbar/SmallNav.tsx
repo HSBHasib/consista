@@ -44,7 +44,7 @@ const SmallNav = ({
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 260 }}
-            className="fixed right-0 top-0 z-50 flex h-screen w-72 flex-col justify-between border-l border-border bg-[#F8F0EA]/80 p-6 shadow-2xl backdrop-blur-xl lg:hidden"
+            className="fixed right-0 top-0 z-50 flex h-screen w-72 flex-col justify-between border-l border-border bg-[#F8F0EA]/90 p-6 shadow-2xl backdrop-blur-xl lg:hidden"
           >
             {/* Drawer Header */}
             <div>
@@ -100,8 +100,6 @@ const SmallNav = ({
             {/* Bottom: Theme Toggle + Auth Actions */}
             <div className="flex flex-col gap-3">
               <div className="my-2 h-px w-full bg-border" />
-
-              <ThemeToggle theme={theme} onToggle={toggleTheme} mobile />
 
               {session ? (
                 <Link href="/dashboard" onClick={closeMobile}>
