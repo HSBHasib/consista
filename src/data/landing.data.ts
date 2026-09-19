@@ -18,11 +18,13 @@ import {
   type ReportStat,
   type MonthBar,
   type FooterColumn,
+  type LeaderboardEntry,
 } from "@/types/landing.type";
 
 export const navLinks: readonly NavLink[] = [
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ] as const;
 
 export const heroData: HeroData = {
@@ -34,8 +36,6 @@ export const heroData: HeroData = {
 } as const;
 
 export const dashboardMockData: DashboardMockData = {
-  greeting: "Good morning, Alex",
-  date: "Thursday, Sep 18",
   streak: "12-day streak",
   stats: [
     { value: "87%", label: "Consistency" },
@@ -180,3 +180,8 @@ export const footerColumns: readonly FooterColumn[] = [
 ] as const;
 
 
+
+export const leaderboardEntries: LeaderboardEntry[] = [
+  { rank: 1, name: 'Alex Rivera', score: 98, tier: 'gold', rankClass: 'text-[#b8860b]' },
+  // বাকি আইটেমগুলো...
+];

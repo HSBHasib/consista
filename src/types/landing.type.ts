@@ -25,8 +25,6 @@ export interface DashTask {
 }
 
 export interface DashboardMockData {
-  readonly greeting: string;
-  readonly date: string;
   readonly streak: string;
   readonly stats: readonly DashStat[];
   readonly tasks: readonly DashTask[];
@@ -100,4 +98,14 @@ export interface ContactInfo {
   readonly phone: string;
   readonly linkedin: string;
   readonly github: string;
+}
+
+
+export interface LeaderboardEntry {
+  rank: number;
+  name: string;
+  avatar?: string;
+  score: number;
+  tier: 'gold' | 'bronze' | 'standard';
+  rankClass?: string; 
 }

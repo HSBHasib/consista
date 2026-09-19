@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/layout/Navbar";
+import { Navbar } from "@/components/layout/navbar/Navbar";
 import { HeroSection } from "@/components/landing/Hero.section";
 import { HowItWorksSection } from "@/components/landing/HowItWorks.section";
 import { CoreFeaturesSection } from "@/components/landing/CoreFeatures.section";

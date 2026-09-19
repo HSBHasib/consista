@@ -4,14 +4,20 @@ import Link from "next/link";
 import { Button } from "@heroui/react";
 import { MotionDiv } from "@/components/motion/Motion-div";
 import { heroData, dashboardMockData } from "@/data/landing.data";
+import { getDynamicDashboardData } from "@/utils/dashboard";
 
 export function HeroSection() {
-  const { greeting, date, streak, stats, tasks } = dashboardMockData;
+  const dynamicInfo = getDynamicDashboardData("Hasib");
+  const UserData = {
+    ...dashboardMockData,
+    greeting: dynamicInfo.greeting,
+    date: dynamicInfo.date,
+  };
 
   return (
     <section className="py-[clamp(60px,10vw,70px)]">
       <div className="mx-auto max-w-295 px-8">
-        <div className="grid items-center gap-[96px] lg:grid-cols-2">
+        <div className="grid items-center gap-24 lg:grid-cols-2">
           
           {/* =============================== */}
           {/* Left Column — Content */}
@@ -34,14 +40,20 @@ export function HeroSection() {
               <Link href="/signup">
                 <Button
                   variant="primary"
-                  className="bg-accent hover:bg-accent/90 transition-colors duration-100  text-white rounded-lg"
+                  className="bg-accent hover:bg-accent/90 transition-colors duration-100 text-white rounded-lg"
                 >
                   {heroData.primaryCta}
                 </Button>
               </Link>
-              <Link href="#how-it-works">
-                <Button variant="ghost" className="text-fg border border-border rounded-lg bg-muted/10 hover:bg-muted/15 transition-colors duration-100">
-                  {heroData.secondaryCta} <span className="ml-1 transition-transform group-hover:translate-x-0.5">→</span>
+              <Link href="/signin">
+                <Button
+                  variant="ghost"
+                  className="text-fg border border-border rounded-lg bg-muted/10 hover:bg-muted/15 transition-colors duration-100"
+                >
+                  {heroData.secondaryCta}{" "}
+                  <span className="ml-1 transition-transform group-hover:translate-x-0.5">
+                    →
+                  </span>
                 </Button>
               </Link>
             </div>
@@ -54,26 +66,34 @@ export function HeroSection() {
           <MotionDiv
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.6,
+              delay: 0.15,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="rounded-2xl border border-border bg-surface/50 p-6 shadow-[0_8px_32px_rgba(44,40,37,0.06)]"
           >
             <div className="mb-5 flex items-center justify-between border-b border-border pb-4">
               <div>
                 <div className="text-lg font-semibold text-fg">
-                  {greeting}
+                  {/* {greeting} */}  {UserData.greeting}
                 </div>
                 <div className="mt-0.5 text-xs text-muted">
-                  {date}
+                  {/* {date} */}
+                  {UserData.date}
                 </div>
               </div>
               <span className="inline-flex items-center rounded-full bg-accent-soft px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.04em] text-accent">
-                {streak}
+                {UserData.streak}
               </span>
             </div>
 
             <div className="mb-5 grid grid-cols-3 gap-3">
-              {stats.map((s) => (
-                <div key={s.label} className="rounded-xl bg-fg-soft/80 p-3.5 text-center">
+              {UserData.stats.map((s) => (
+                <div
+                  key={s.label}
+                  className="rounded-xl bg-fg-soft/80 p-3.5 text-center"
+                >
                   <div className="text-[26px] font-bold leading-none text-accent">
                     {s.value}
                   </div>
@@ -85,19 +105,19 @@ export function HeroSection() {
             </div>
 
             <div>
-              {tasks.map((task) => (
+              {UserData.tasks.map((task) => (
                 <div
                   key={task.text}
                   className="flex items-center gap-2.5 border-b border-border py-2.5 text-sm last:border-b-0"
                 >
                   <div
                     className={`h-4.5 w-4.5 shrink-0 rounded-full border-2 ${
-                      task.done
-                        ? "border-success bg-success"
-                        : "border-border"
+                      task.done ? "border-success bg-success" : "border-border"
                     }`}
                   />
-                  <span className={`flex-1 ${task.done ? "text-muted line-through" : "text-fg"}`}>
+                  <span
+                    className={`flex-1 ${task.done ? "text-muted line-through" : "text-fg"}`}
+                  >
                     {task.text}
                   </span>
                   <span

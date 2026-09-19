@@ -2,11 +2,11 @@
 @import "@heroui/styles";
 
 @theme {
-  --color-parchment: #f5ebe390;
-  --color-surface: #ffffff;
-  --color-fg: #2c2825;
-  --color-muted: #8a8480;
-  --color-border: #e8e2da;
+  --color-parchment: var(--color-bg);
+  --color-surface: var(--color-surface-base);
+  --color-fg: var(--color-fg-base);
+  --color-muted: var(--color-muted-base);
+  --color-border: var(--color-border-base);
   --color-accent: #c47a3a;
   --color-accent-soft: color-mix(in srgb, var(--color-accent) 12%, transparent);
   --color-success: #5a9a6e;
@@ -15,7 +15,15 @@
   --color-missed-soft: color-mix(in srgb, var(--color-missed) 50%, transparent);
   --color-bronze: #a0522d;
   --color-gold: #b8860b;
-  --color-fg-soft: color-mix(in srgb, var(--color-fg) 5%, transparent);
+  --color-fg-soft: color-mix(in srgb, var(--color-fg-base) 5%, transparent);
+}
+
+:root {
+  --color-bg: #f5ebe390;
+  --color-surface-base: #ffffff;
+  --color-fg-base: #2c2825;
+  --color-muted-base: #8a8480;
+  --color-border-base: #e8e2da;
 }
 
 html {
@@ -23,7 +31,9 @@ html {
 }
 
 body {
-  background-color: var(--color-parchment);
+  background-color: var(--color-bg);
   color: var(--color-fg);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 
