@@ -1,9 +1,12 @@
+"use client";
+
 import { EditorialConsistencySvg } from "@/lib/svg/EditorialConsistencySvg";
+import { MotionDiv } from "@/components/motion/Motion-div";
 
 export function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2 bg-parchment">
-      <div className="relative hidden lg:flex flex-col items-center justify-center p-12 border-r border-border/60 bg-[#f3eae1]/50 overflow-hidden">
+    <div className="grid grid-cols-1 lg:grid-cols-2">
+      <div className="relative hidden lg:flex flex-col items-center justify-center p-12 border-r border-border/60 overflow-hidden">
         
         {/* ======================== */}
         {/* background Colors */}
@@ -12,7 +15,12 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
         <div className="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-bronze/8 blur-3xl pointer-events-none" />
 
 
-        <div className="relative z-10 flex flex-col items-center text-center max-w-md">
+        <MotionDiv
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="relative z-10 flex flex-col items-center text-center max-w-md"
+        >
           {/* ======================== */}
           {/* Illustration */}
           {/* ======================== */}
@@ -29,15 +37,21 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
           <p className="mt-3 text-sm leading-relaxed text-muted">
             Join thousands of people who track their daily progress and build lasting habits.
           </p>
-        </div>
+        </MotionDiv>
       </div>
 
       {/* Right form container: shows on all devices */}
-      <div className="flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-20 bg-[#F9F4EF]/10">
-        <div className="mx-auto w-full max-w-105">{children}</div>
+      <div className="flex flex-col lg:justify-center justify-start px-6 py-7 sm:px-12 lg:px-20">
+        <MotionDiv
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="mx-auto w-full max-w-105"
+        >
+          {children}
+        </MotionDiv>
       </div>
     </div>
   );
 }
-
 

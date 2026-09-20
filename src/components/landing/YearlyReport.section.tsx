@@ -43,7 +43,7 @@ export function YearlyReportSection() {
 
   return (
     <section id="report" className="border-t border-border py-[clamp(48px,8vw,96px)]">
-      <div className="mx-auto max-w-295 px-8">
+      <div className="mx-auto max-w-295 px-5 sm:px-8">
         
         {/* ============================ */}
         {/* Annual Report — Title */}
@@ -113,38 +113,40 @@ export function YearlyReportSection() {
             <p className="mb-4 text-center text-xs uppercase tracking-[0.06em] text-muted">
               Monthly Breakdown
             </p>
-            <motion.div
-              variants={barContainer}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-20px" }}
-              className="grid grid-cols-12 gap-2 text-center"
-            >
-              {monthBars.map((bar) => (
-                <motion.div
-                  key={bar.label}
-                  variants={barItem}
-                  whileHover={{ scale: 1.04, y: -2 }}
-                  className="cursor-pointer"
-                  style={{ transformOrigin: "bottom" }}
-                >
-                  <div
-                    className="mx-auto rounded-t transition-shadow hover:shadow-sm"
-                    style={{
-                      height: bar.height,
-                      width: "100%",
-                      background: bar.filled
-                        ? `color-mix(in srgb, var(--color-success) 100%, transparent)`
-                        : "var(--color-fg-soft)",
-                      opacity: bar.filled ? bar.opacity : 1,
-                    }}
-                  />
-                  <span className="mt-1 text-[11px] text-muted">
-                    {bar.label}
-                  </span>
-                </motion.div>
-              ))}
-            </motion.div>
+            <div className="overflow-x-auto -mx-2 px-2">
+              <motion.div
+                variants={barContainer}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-20px" }}
+                className="grid grid-cols-12 gap-2 text-center min-w-[480px]"
+              >
+                {monthBars.map((bar) => (
+                  <motion.div
+                    key={bar.label}
+                    variants={barItem}
+                    whileHover={{ scale: 1.04, y: -2 }}
+                    className="cursor-pointer"
+                    style={{ transformOrigin: "bottom" }}
+                  >
+                    <div
+                      className="mx-auto rounded-t transition-shadow hover:shadow-sm"
+                      style={{
+                        height: bar.height,
+                        width: "100%",
+                        background: bar.filled
+                          ? `color-mix(in srgb, var(--color-success) 100%, transparent)`
+                          : "var(--color-fg-soft)",
+                        opacity: bar.filled ? bar.opacity : 1,
+                      }}
+                    />
+                    <span className="mt-1 text-[11px] text-muted">
+                      {bar.label}
+                    </span>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
           </div>
 
 

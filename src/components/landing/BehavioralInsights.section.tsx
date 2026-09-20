@@ -6,7 +6,7 @@ import { insightCategories } from "@/data/landing.data";
 export function BehavioralInsightsSection() {
   return (
     <section id="insights" className="border-t border-border py-[clamp(48px,8vw,96px)]">
-      <div className="mx-auto max-w-295 px-8">
+      <div className="mx-auto max-w-295 px-5 sm:px-8">
         <div className="grid items-center gap-16 lg:grid-cols-2">
           {/* ============================== */}
           {/* Left Column — Radar Chart */}
@@ -16,7 +16,7 @@ export function BehavioralInsightsSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="rounded-2xl border border-border bg-surface/40 p-10"
+            className="rounded-2xl border border-border bg-surface/40 p-6 sm:p-10"
           >
             <div className="relative mx-auto aspect-square max-w-70">
               <svg viewBox="0 0 280 280" fill="none" className="h-full w-full">
@@ -35,19 +35,19 @@ export function BehavioralInsightsSection() {
                   <circle key={i} cx={cx} cy={cy} r="4" fill="var(--color-accent)" />
                 ))}
               </svg>
-              <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.04em] text-fg">
+              <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[10px] sm:text-xs uppercase tracking-[0.04em] text-fg">
                 Study
               </span>
-              <span className="absolute right-[-12px] top-[18%] text-xs uppercase tracking-[0.04em] text-fg">
+              <span className="absolute right-[-8px] sm:right-[-12px] top-[18%] text-[10px] sm:text-xs uppercase tracking-[0.04em] text-fg">
                 Work
               </span>
-              <span className="absolute bottom-[18%] right-[-12px] text-xs uppercase tracking-[0.04em] text-fg">
+              <span className="absolute bottom-[18%] right-[-8px] sm:right-[-12px] text-[10px] sm:text-xs uppercase tracking-[0.04em] text-fg">
                 Exercise
               </span>
-              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.04em] text-fg">
+              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-[10px] sm:text-xs uppercase tracking-[0.04em] text-fg">
                 Reading
               </span>
-              <span className="absolute bottom-[18%] left-[-12px] text-xs uppercase tracking-[0.04em] text-fg">
+              <span className="absolute bottom-[18%] left-[-8px] sm:left-[-12px] text-[10px] sm:text-xs uppercase tracking-[0.04em] text-fg">
                 Growth
               </span>
             </div>

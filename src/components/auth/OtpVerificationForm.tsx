@@ -10,6 +10,7 @@ import {
   ExtendedOtpVerificationFormProps,
   OtpVerificationFormData,
 } from "@/types/auth.types";
+import { MotionDiv } from "@/components/motion/Motion-div";
 
 function OtpFormContent({
   defaultEmail = "your email address",
@@ -216,90 +217,109 @@ function OtpFormContent({
 
   return (
     <div className="w-full max-w-sm mx-auto text-center flex flex-col items-center px-4">
-      <div className="mx-auto mb-3 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-[#c27850]/12">
-        <IoMdMailUnread className="text-[#c27850] h-6 w-6 sm:h-8 sm:w-8" />
-      </div>
+      <MotionDiv
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <div className="mx-auto mb-3 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-[#c27850]/12">
+          <IoMdMailUnread className="text-[#c27850] h-6 w-6 sm:h-8 sm:w-8" />
+        </div>
 
-      <h1 className="text-[22px] sm:text-[24px] font-bold tracking-[-0.01em] text-fg">
-        {verificationType === "forget-password"
-          ? "Reset your password"
-          : "Check your email"}
-      </h1>
-      <p className="mx-auto mt-1 text-[14px] sm:text-[15px] text-muted">
-        We sent a 6-digit code to{" "}
-        <span className="font-medium text-fg break-all">{emailFromQuery}</span>.
-        Enter it below to continue.
-      </p>
+        <h1 className="text-[22px] sm:text-[24px] font-bold tracking-[-0.01em] text-fg">
+          {verificationType === "forget-password"
+            ? "Reset your password"
+            : "Check your email"}
+        </h1>
+        <p className="mx-auto mt-1 text-[14px] sm:text-[15px] text-muted">
+          We sent a 6-digit code to{" "}
+          <span className="font-medium text-fg break-all">{emailFromQuery}</span>.
+          Enter it below to continue.
+        </p>
+      </MotionDiv>
 
       {/* ============================== */}
       {/* OTP Input Form (Responsive & Accessible) */}
       {/* ============================== */}
-      <form
-        onSubmit={handleFormSubmit}
-        className="mt-6 sm:mt-8 space-y-6 flex flex-col items-center w-full"
+      <MotionDiv
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full"
       >
-        <div className="flex justify-center gap-1.5 sm:gap-2.5 w-full">
-          {digits.map((digit, index) => (
-            <input
-              key={index}
-              id={`otp-input-${index}`}
-              type="text"
-              maxLength={1}
-              inputMode="numeric"
-              aria-label={`Digit ${index + 1}`}
-              value={digit}
-              onChange={(e) => handleDigitChange(index, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(index, e)}
-              onPaste={handlePaste}
-              className="h-10.5 w-10.5 sm:h-13 sm:w-13 rounded-[10px] border border-border bg-surface text-center text-[18px] sm:text-[22px] text-fg transition-all duration-150 focus:border-accent focus:outline-none focus:ring-3 focus:ring-[#c27850]/15"
-            />
-          ))}
-        </div>
-
-        {errorMessage && <p className="text-xs text-red-600">{errorMessage}</p>}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-accent px-5 py-3 text-[15px] font-medium tracking-[-0.005em] text-white transition-all hover:bg-[#a0522d] active:translate-y-[1px] disabled:opacity-60 cursor-pointer"
+        <form
+          onSubmit={handleFormSubmit}
+          className="mt-6 sm:mt-8 space-y-6 flex flex-col items-center w-full"
         >
-          {loading
-            ? "Verifying..."
-            : verificationType === "forget-password"
-              ? "Verify Code"
-              : "Verify Email"}
-        </button>
-      </form>
+          <div className="flex justify-center gap-1.5 sm:gap-2.5 w-full">
+            {digits.map((digit, index) => (
+              <input
+                key={index}
+                id={`otp-input-${index}`}
+                type="text"
+                maxLength={1}
+                inputMode="numeric"
+                aria-label={`Digit ${index + 1}`}
+                value={digit}
+                onChange={(e) => handleDigitChange(index, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(index, e)}
+                onPaste={handlePaste}
+                className="h-10.5 w-10.5 sm:h-13 sm:w-13 rounded-[10px] border border-border bg-surface text-center text-[18px] sm:text-[22px] text-fg transition-all duration-150 focus:border-accent focus:outline-none focus:ring-3 focus:ring-[#c27850]/15"
+              />
+            ))}
+          </div>
+
+          {errorMessage && <p className="text-xs text-red-600">{errorMessage}</p>}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-accent px-5 py-3 text-[15px] font-medium tracking-[-0.005em] text-white transition-all hover:bg-[#a0522d] active:translate-y-[1px] disabled:opacity-60 cursor-pointer"
+          >
+            {loading
+              ? "Verifying..."
+              : verificationType === "forget-password"
+                ? "Verify Code"
+                : "Verify Email"}
+          </button>
+        </form>
+      </MotionDiv>
 
       {/* ============================= */}
       {/* Timer Display 5min (Persistent) */}
       {/* ============================= */}
-      <div className="mt-4 text-[13px] text-muted">
-        {timeLeft > 0 ? (
-          <span>
-            Code expires in{" "}
-            <span className="font-medium text-fg">{formatTime(timeLeft)}</span>
-          </span>
-        ) : (
-          <span className="text-red-500 font-medium">
-            Code has expired. Please request a new code.
-          </span>
-        )}
-      </div>
+      <MotionDiv
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <div className="mt-4 text-[13px] text-muted">
+          {timeLeft > 0 ? (
+            <span>
+              Code expires in{" "}
+              <span className="font-medium text-fg">{formatTime(timeLeft)}</span>
+            </span>
+          ) : (
+            <span className="text-red-500 font-medium">
+              Code has expired. Please request a new code.
+            </span>
+          )}
+        </div>
 
-      {/* ============================== */}
-      {/* Resend Code Features */}
-      {/* ============================== */}
-      <div className="mt-3 flex items-center justify-center gap-1.5 text-[14px] text-muted">
-        <p>Didn&apos;t receive the code?</p>
-        <Link
-          href="#"
-          onClick={handleResendClick}
-          className="font-medium text-accent underline cursor-pointer"
-        >
-          Resend
-        </Link>
-      </div>
+        {/* ============================== */}
+        {/* Resend Code Features */}
+        {/* ============================== */}
+        <div className="mt-3 flex items-center justify-center gap-1.5 text-[14px] text-muted">
+          <p>Didn&apos;t receive the code?</p>
+          <Link
+            href="#"
+            onClick={handleResendClick}
+            className="font-medium text-accent underline cursor-pointer"
+          >
+            Resend
+          </Link>
+        </div>
+      </MotionDiv>
     </div>
   );
 }

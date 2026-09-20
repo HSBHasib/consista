@@ -7,7 +7,7 @@ import { MotionDiv } from "@/components/motion/Motion-div";
 export function ProgressMilestoneSection() {
   return (
     <section className="border-t border-border py-[clamp(48px,8vw,96px)]">
-      <div className="mx-auto max-w-[600px] px-8 text-center">
+      <div className="mx-auto max-w-[600px] px-5 sm:px-8 text-center">
         <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

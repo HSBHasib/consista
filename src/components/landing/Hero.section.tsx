@@ -40,9 +40,9 @@ export function HeroSection() {
 
 
   return (
-    <section className="py-[clamp(60px,10vw,70px)]">
-      <div className="mx-auto max-w-295 px-8">
-        <div className="grid items-center gap-24 lg:grid-cols-2">
+    <section className="py-[clamp(40px,8vw,70px)]">
+      <div className="mx-auto max-w-295 px-5 sm:px-8">
+        <div className="grid items-center gap-12 sm:gap-16 lg:gap-24 lg:grid-cols-2">
           
           {/* =============================== */}
           {/* Left Column — Content */}

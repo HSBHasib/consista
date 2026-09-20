@@ -7,7 +7,7 @@ import { features } from "@/data/landing.data";
 export function CoreFeaturesSection() {
   return (
     <section id="features" className="border-t border-border py-[clamp(48px,8vw,96px)]">
-      <div className="mx-auto max-w-[1120px] px-8">
+      <div className="mx-auto max-w-[1120px] px-5 sm:px-8">
         <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

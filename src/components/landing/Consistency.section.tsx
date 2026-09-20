@@ -60,7 +60,7 @@ export function ConsistencySection() {
   const currentDate = new Date();
   return (
     <section id="streaks" className="border-t border-border py-[clamp(48px,8vw,96px)]">
-      <div className="mx-auto max-w-270 px-8">
+      <div className="mx-auto max-w-270 px-5 sm:px-8">
         <div className="grid items-center gap-16 lg:grid-cols-2">
 
           {/* ===================================== */}

@@ -6,7 +6,7 @@ import { flowSteps } from "@/data/landing.data";
 export function HowItWorksSection() {
   return (
     <section id="how-it-works" className="border-t border-border py-[clamp(48px,8vw,96px)]">
-      <div className="mx-auto max-w-295 px-8">
+      <div className="mx-auto max-w-295 px-5 sm:px-8">
 
         {/* Section Header */}
         <MotionDiv

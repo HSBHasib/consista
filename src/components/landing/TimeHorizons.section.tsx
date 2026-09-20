@@ -20,7 +20,7 @@ const block = {
 export function TimeHorizonsSection() {
   return (
     <section id="timeline" className="border-t border-border py-[clamp(48px,8vw,96px)]">
-      <div className="mx-auto max-w-280 px-8">
+      <div className="mx-auto max-w-280 px-5 sm:px-8">
         {/* Section Header */}
         <MotionDiv
           initial={{ opacity: 0, y: 20 }}
