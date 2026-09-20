@@ -7,14 +7,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Link } from "@heroui/react";
 import { IoMdMailUnread } from "react-icons/io";
 import {
+  ExtendedOtpVerificationFormProps,
   OtpVerificationFormData,
-  OtpVerificationFormProps,
 } from "@/types/auth.types";
-
-export interface ExtendedOtpVerificationFormProps extends OtpVerificationFormProps {
-  verificationType?: "email-verification" | "forget-password";
-  onSuccessRoute?: string;
-}
 
 function OtpFormContent({
   defaultEmail = "your email address",
@@ -22,7 +17,9 @@ function OtpFormContent({
   onResend,
   externalLoading = false,
   verificationType = "email-verification",
-  onSuccessRoute = "/sign-in",
+  onSuccessRoute = verificationType === "email-verification"
+    ? "/sign-in"
+    : "/reset-password",
 }: {
   defaultEmail?: string;
   onSubmitOtp?: (data: OtpVerificationFormData) => Promise<void> | void;
@@ -145,59 +142,6 @@ function OtpFormContent({
     document.getElementById(`otp-input-${focusIndex}`)?.focus();
   };
 
-  // // ========================
-  // // Form Submission Handler
-  // // ========================
-  // const handleFormSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   const otpValue = digits.join("");
-  //   if (otpValue.length < 6) {
-  //     const msg = "Please enter all 6 digits verification code.";
-  //     setErrorMessage(msg);
-  //     toast.error(msg);
-  //     return;
-  //   }
-
-  //   setErrorMessage(null);
-  //   setInternalLoading(true);
-
-  //   try {
-  //     if (onSubmitOtp) {
-  //       await onSubmitOtp({ otp: otpValue });
-  //     } else {
-  //       if (verificationType === "email-verification") {
-  //         const { error } = await authClient.emailOtp.verifyEmail({
-  //           email: emailFromQuery,
-  //           otp: otpValue,
-  //         });
-
-  //         if (error) {
-  //           toast.error(error.message || "Invalid OTP");
-  //         } else {
-  //           toast.success("Email verified successfully!");
-  //           router.push(onSuccessRoute);
-  //         }
-  //       } else if (verificationType === "forget-password") {
-  //         // BetterAuth forget-password verify step / reset trigger
-  //         const { error } = await authClient.forgetPassword({
-  //           email: emailFromQuery,
-  //           otp: otpValue,
-  //           newPassword: "...", // Optional depending on step, or handle via dedicated reset form
-  //         } as any);
-
-  //         if (error) {
-  //           toast.error(error.message || "Invalid or expired OTP");
-  //         } else {
-  //           toast.success("OTP verified. Proceed to reset password.");
-  //           router.push(`/reset-password?email=${encodeURIComponent(emailFromQuery)}&otp=${encodeURIComponent(otpValue)}`);
-  //         }
-  //       }
-  //     }
-  //   } finally {
-  //     setInternalLoading(false);
-  //   }
-  // };
-
   // ========================
   // Form Submission Handler
   // ========================
@@ -231,19 +175,10 @@ function OtpFormContent({
             router.push(onSuccessRoute);
           }
         } else if (verificationType === "forget-password") {
-          const { error } = await authClient.emailOtp.verifyEmail({
-            email: emailFromQuery,
-            otp: otpValue,
-          });
-
-          if (error) {
-            toast.error(error.message || "Invalid or expired OTP");
-          } else {
-            toast.success("OTP verified. Please set your new password.");
-            router.push(
-              `/reset-password?email=${encodeURIComponent(emailFromQuery)}&otp=${encodeURIComponent(otpValue)}`,
-            );
-          }
+          toast.success("OTP accepted. Please set your new password.");
+          router.push(
+            `/reset-password?email=${encodeURIComponent(emailFromQuery)}&otp=${encodeURIComponent(otpValue)}`,
+          );
         }
       }
     } finally {
@@ -389,3 +324,4 @@ export function OtpVerificationForm(props: ExtendedOtpVerificationFormProps) {
     </Suspense>
   );
 }
+

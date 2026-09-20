@@ -29,6 +29,11 @@ export interface ResetPasswordFormProps {
   loading?: boolean;
 }
 
+export interface ExtendedOtpVerificationFormProps extends OtpVerificationFormProps {
+  verificationType?: "email-verification" | "forget-password";
+  onSuccessRoute?: string;
+}
+
 export interface PasswordInputProps {
   id?: string;
   name?: string;

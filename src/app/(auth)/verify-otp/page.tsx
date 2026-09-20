@@ -1,23 +1,31 @@
-import type { Metadata } from "next";
-import { AuthLayout } from "@/components/auth/AuthLayout";
-import { OtpVerificationForm } from "@/components/auth/OtpVerificationForm";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Verify OTP — Consista",
-  description:
-    "Verify your one-time password to secure your Consista account and continue building lasting habits.",
-  openGraph: {
-    title: "Verify OTP — Consista",
-    description:
-      "Verify your one-time password to secure your Consista account and continue building lasting habits.",
-  },
-};
+import { useSearchParams } from "next/navigation";
+import { OtpVerificationForm } from "@/components/auth/OtpVerificationForm";
+import { Suspense } from "react";
+import { AuthLayout } from "@/components/auth/AuthLayout";
+
+function VerifyOtpPageContent() {
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email") || "";
+  const typeParam = searchParams.get("type");
+  const verificationType =
+    typeParam === "forget-password" ? "forget-password" : "email-verification";
+
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <OtpVerificationForm email={email} verificationType={verificationType} />
+    </div>
+  );
+}
 
 export default function VerifyOtpPage() {
   return (
-    <AuthLayout>
-        <OtpVerificationForm />
-    </AuthLayout>
+    <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+      <AuthLayout>
+        <VerifyOtpPageContent />
+      </AuthLayout>
+    </Suspense>
   );
 }
 
