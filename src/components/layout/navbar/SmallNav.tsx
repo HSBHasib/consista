@@ -24,6 +24,20 @@ const SmallNav = ({
   theme,
   toggleTheme,
 }: SmallNavProps) => {
+  const handleSignOut = async () => {
+    closeMobile();
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/sign-out`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch {
+      // sign out even if request fails
+    }
+    window.location.href = "/";
+  };
+
   return (
     <AnimatePresence>
       {mobileOpen && (
@@ -102,17 +116,16 @@ const SmallNav = ({
               <div className="my-2 h-px w-full bg-border" />
 
               {session ? (
-                <Link href="/dashboard" onClick={closeMobile}>
-                  <Button
-                    variant="primary"
-                    className="w-full bg-accent text-white rounded-lg"
-                  >
-                    Dashboard
-                  </Button>
-                </Link>
+                <Button
+                  variant="ghost"
+                  onClick={handleSignOut}
+                  className="w-full bg-muted/13 hover:bg-muted/18 transition-colors duration-100 rounded-xl cursor-pointer"
+                >
+                  Sign Out
+                </Button>
               ) : (
                 <>
-                  <Link href="/signin" onClick={closeMobile}>
+                  <Link href="/sign-in" onClick={closeMobile}>
                     <Button
                       variant="ghost"
                       className="w-full bg-muted/13 hover:bg-muted/18 transition-colors duration-100 rounded-xl"
@@ -120,7 +133,7 @@ const SmallNav = ({
                       Sign In
                     </Button>
                   </Link>
-                  <Link href="/signup" onClick={closeMobile}>
+                  <Link href="/sign-up" onClick={closeMobile}>
                     <Button
                       variant="primary"
                       className="w-full bg-accent text-white rounded-xl"

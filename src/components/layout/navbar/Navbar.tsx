@@ -92,6 +92,19 @@ export function Navbar() {
 
   const closeMobile = () => setMobileOpen(false);
 
+  const handleSignOut = async () => {
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/sign-out`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch {
+      // sign out even if request fails
+    }
+    window.location.href = "/";
+  };
+
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-parchment/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
@@ -166,14 +179,16 @@ export function Navbar() {
                 <div className="h-9 w-24 rounded-xl bg-accent/20 animate-pulse" />
               </div>
             ) : session ? (
-              <Link href="/dashboard">
-                <Button variant="primary" className="bg-accent text-white">
-                  Dashboard
-                </Button>
-              </Link>
+              <Button
+                variant="ghost"
+                onClick={handleSignOut}
+                className="text-fg hover:bg-muted/13 transition-colors duration-100 rounded-xl cursor-pointer"
+              >
+                Sign Out
+              </Button>
             ) : (
               <>
-                <Link href="/signin">
+                <Link href="/sign-in">
                   <Button
                     variant="ghost"
                     className="text-fg hover:bg-muted/13 transition-colors duration-100 rounded-xl"

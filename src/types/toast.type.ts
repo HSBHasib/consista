@@ -1,7 +1,3 @@
-export type ToastFunction = (msg: string) => void;
+import type { GooeyToastOptions } from "goey-toast";
 
-export interface GoeyToastInstance {
-  success?: ToastFunction;
-  error?: ToastFunction;
-  info?: ToastFunction;
-}
+export type ToastFunction = (msg: string, options?: Partial<GooeyToastOptions>) => string | number;

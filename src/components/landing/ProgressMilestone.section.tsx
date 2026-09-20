@@ -21,7 +21,7 @@ export function ProgressMilestoneSection() {
             Start tracking your consistency today. See how small daily actions compound into meaningful results.
           </p>
           <div className="mt-8 inline-flex gap-3">
-            <Link href="/signup">
+            <Link href="/sign-up">
               <Button variant="primary" className="bg-accent hover:bg-accent/90 transition-colors duration-100  text-white rounded-lg">
                 Start Your Journey
               </Button>

@@ -75,7 +75,7 @@ export function HeroSection() {
               {heroData.lead}
             </p>
             <div className="mt-7 inline-flex gap-3">
-              <Link href="/signup">
+              <Link href="/sign-up">
                 <Button
                   variant="primary"
                   className="bg-accent hover:bg-accent/90 transition-colors duration-100 text-white rounded-lg"
@@ -83,7 +83,7 @@ export function HeroSection() {
                   {heroData.primaryCta}
                 </Button>
               </Link>
-              <Link href="/signin">
+              <Link href="/sign-in">
                 <Button
                   variant="ghost"
                   className="text-fg border border-border rounded-lg bg-muted/10 hover:bg-muted/15 transition-colors duration-100"
