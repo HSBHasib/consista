@@ -6,7 +6,7 @@ const defaultOptions: Partial<GooeyToastOptions> = {
 };
 
 export const toast = {
-  success: (msg: string, options?: Partial<GooeyToastOptions>): string | number => {
+  success: (msg: string, options?: Partial<GooeyToastOptions>): string | number | string => {
     return goeyToast.success(msg, { ...defaultOptions, ...options });
   },
   error: (msg: string, options?: Partial<GooeyToastOptions>): string | number => {

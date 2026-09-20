@@ -1,31 +1,91 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { toast } from "@/utils/toast";
-import { IoIosMail } from "react-icons/io";
-import { IoMailUnreadOutline } from "react-icons/io5";
+import { authClient } from "@/lib/auth-client";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Link } from "@heroui/react";
+import { IoMdMailUnread } from "react-icons/io";
+import {
+  OtpVerificationFormData,
+  OtpVerificationFormProps,
+} from "@/types/auth.types";
 
-export interface OtpVerificationFormData {
-  otp: string;
+export interface ExtendedOtpVerificationFormProps extends OtpVerificationFormProps {
+  verificationType?: "email-verification" | "forget-password";
+  onSuccessRoute?: string;
 }
 
-interface OtpVerificationFormProps {
-  email?: string;
-  onSubmitOtp?: (data: OtpVerificationFormData) => Promise<void> | void;
-  onResend?: () => Promise<void> | void;
-  loading?: boolean;
-}
-
-export function OtpVerificationForm({
-  email = "your email address",
+function OtpFormContent({
+  defaultEmail = "your email address",
   onSubmitOtp,
   onResend,
-  loading = false,
-}: OtpVerificationFormProps) {
+  externalLoading = false,
+  verificationType = "email-verification",
+  onSuccessRoute = "/sign-in",
+}: {
+  defaultEmail?: string;
+  onSubmitOtp?: (data: OtpVerificationFormData) => Promise<void> | void;
+  onResend?: () => Promise<void> | void;
+  externalLoading?: boolean;
+  verificationType?: "email-verification" | "forget-password";
+  onSuccessRoute?: string;
+}) {
   const [digits, setDigits] = useState<string[]>(["", "", "", "", "", ""]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [internalLoading, setInternalLoading] = useState(false);
+  const [timeLeft, setTimeLeft] = useState<number>(300);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
+  // ===================================
+  // Get email from query parameters or fallback to default
+  // ===================================
+  const emailFromQuery = searchParams.get("email") || defaultEmail;
+  const loading = externalLoading || internalLoading;
+
+  // =====================================
+  // Persistent Countdown timer effect (reload-proof, respects expiration lock at 0)
+  // =====================================
+  useEffect(() => {
+    const STORAGE_KEY = `otp_expiry_${verificationType}_${emailFromQuery}`;
+    const savedExpiry = sessionStorage.getItem(STORAGE_KEY);
+    const now = Date.now();
+
+    let targetTime: number;
+    if (savedExpiry) {
+      targetTime = Number(savedExpiry);
+      const remaining = Math.max(0, Math.floor((targetTime - now) / 1000));
+      setTimeLeft(remaining);
+    } else {
+      targetTime = now + 300 * 1000;
+      sessionStorage.setItem(STORAGE_KEY, targetTime.toString());
+      setTimeLeft(300);
+    }
+
+    const timer = setInterval(() => {
+      const currentStored = sessionStorage.getItem(STORAGE_KEY);
+      if (currentStored) {
+        const remaining = Math.max(
+          0,
+          Math.floor((Number(currentStored) - Date.now()) / 1000),
+        );
+        setTimeLeft(remaining);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [emailFromQuery, verificationType]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  // ========================
+  // Input Handling (Responsive & Smooth)
+  // ========================
   const handleDigitChange = (index: number, value: string) => {
     const char = value.slice(-1);
     if (!/^\d*$/.test(char)) return;
@@ -36,29 +96,38 @@ export function OtpVerificationForm({
     if (errorMessage) setErrorMessage(null);
 
     if (char && index < 5) {
-      inputRefs.current[index + 1]?.focus();
+      const nextInput = document.getElementById(`otp-input-${index + 1}`);
+      nextInput?.focus();
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+  // ==========================
+  // Handle keyboard events for each OTP input
+  // ==========================
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (e.key === "Backspace") {
-      if (!digits[index] && index > 0) {
-        const newDigits = [...digits];
-        newDigits[index - 1] = "";
-        setDigits(newDigits);
-        inputRefs.current[index - 1]?.focus();
-      } else {
-        const newDigits = [...digits];
+      const newDigits = [...digits];
+      if (digits[index]) {
         newDigits[index] = "";
         setDigits(newDigits);
+      } else if (index > 0) {
+        newDigits[index - 1] = "";
+        setDigits(newDigits);
+        document.getElementById(`otp-input-${index - 1}`)?.focus();
       }
     } else if (e.key === "ArrowLeft" && index > 0) {
-      inputRefs.current[index - 1]?.focus();
+      document.getElementById(`otp-input-${index - 1}`)?.focus();
     } else if (e.key === "ArrowRight" && index < 5) {
-      inputRefs.current[index + 1]?.focus();
+      document.getElementById(`otp-input-${index + 1}`)?.focus();
     }
   };
 
+  // ==========================
+  // Handle pasting of OTP code
+  // ==========================
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData("text").trim();
@@ -73,13 +142,69 @@ export function OtpVerificationForm({
     if (errorMessage) setErrorMessage(null);
 
     const focusIndex = Math.min(chars.length, 5);
-    inputRefs.current[focusIndex]?.focus();
+    document.getElementById(`otp-input-${focusIndex}`)?.focus();
   };
 
+  // // ========================
+  // // Form Submission Handler
+  // // ========================
+  // const handleFormSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   const otpValue = digits.join("");
+  //   if (otpValue.length < 6) {
+  //     const msg = "Please enter all 6 digits verification code.";
+  //     setErrorMessage(msg);
+  //     toast.error(msg);
+  //     return;
+  //   }
+
+  //   setErrorMessage(null);
+  //   setInternalLoading(true);
+
+  //   try {
+  //     if (onSubmitOtp) {
+  //       await onSubmitOtp({ otp: otpValue });
+  //     } else {
+  //       if (verificationType === "email-verification") {
+  //         const { error } = await authClient.emailOtp.verifyEmail({
+  //           email: emailFromQuery,
+  //           otp: otpValue,
+  //         });
+
+  //         if (error) {
+  //           toast.error(error.message || "Invalid OTP");
+  //         } else {
+  //           toast.success("Email verified successfully!");
+  //           router.push(onSuccessRoute);
+  //         }
+  //       } else if (verificationType === "forget-password") {
+  //         // BetterAuth forget-password verify step / reset trigger
+  //         const { error } = await authClient.forgetPassword({
+  //           email: emailFromQuery,
+  //           otp: otpValue,
+  //           newPassword: "...", // Optional depending on step, or handle via dedicated reset form
+  //         } as any);
+
+  //         if (error) {
+  //           toast.error(error.message || "Invalid or expired OTP");
+  //         } else {
+  //           toast.success("OTP verified. Proceed to reset password.");
+  //           router.push(`/reset-password?email=${encodeURIComponent(emailFromQuery)}&otp=${encodeURIComponent(otpValue)}`);
+  //         }
+  //       }
+  //     }
+  //   } finally {
+  //     setInternalLoading(false);
+  //   }
+  // };
+
+  // ========================
+  // Form Submission Handler
+  // ========================
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const combined = digits.join("");
-    if (combined.length < 6) {
+    const otpValue = digits.join("");
+    if (otpValue.length < 6) {
       const msg = "Please enter all 6 digits verification code.";
       setErrorMessage(msg);
       toast.error(msg);
@@ -87,40 +212,102 @@ export function OtpVerificationForm({
     }
 
     setErrorMessage(null);
-    if (onSubmitOtp) {
-      await onSubmitOtp({ otp: combined });
+    setInternalLoading(true);
+
+    try {
+      if (onSubmitOtp) {
+        await onSubmitOtp({ otp: otpValue });
+      } else {
+        if (verificationType === "email-verification") {
+          const { error } = await authClient.emailOtp.verifyEmail({
+            email: emailFromQuery,
+            otp: otpValue,
+          });
+
+          if (error) {
+            toast.error(error.message || "Invalid OTP");
+          } else {
+            toast.success("Email verified successfully!");
+            router.push(onSuccessRoute);
+          }
+        } else if (verificationType === "forget-password") {
+          const { error } = await authClient.emailOtp.verifyEmail({
+            email: emailFromQuery,
+            otp: otpValue,
+          });
+
+          if (error) {
+            toast.error(error.message || "Invalid or expired OTP");
+          } else {
+            toast.success("OTP verified. Please set your new password.");
+            router.push(
+              `/reset-password?email=${encodeURIComponent(emailFromQuery)}&otp=${encodeURIComponent(otpValue)}`,
+            );
+          }
+        }
+      }
+    } finally {
+      setInternalLoading(false);
     }
   };
 
+  // ========================
+  // Resend Code Handler (Strictly resets timer to full 300s only on explicit resend)
+  // ========================
   const handleResendClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     if (onResend) {
       await onResend();
+    } else {
+      const { error } = await authClient.emailOtp.sendVerificationOtp({
+        email: emailFromQuery,
+        type: verificationType,
+      });
+
+      if (error) {
+        toast.error(error.message || "Failed to resend code.");
+        return;
+      } else {
+        toast.success("Verification code resent.");
+      }
     }
-    toast.info("Verification code resent.");
+
+    // Forcefully reset expiry and timer state to full 5 minutes (300s) on resend
+    const STORAGE_KEY = `otp_expiry_${verificationType}_${emailFromQuery}`;
+    const newTarget = Date.now() + 300 * 1000;
+    sessionStorage.setItem(STORAGE_KEY, newTarget.toString());
+    setTimeLeft(300);
   };
 
   return (
-    <div className="w-full text-center">
-      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#c27850]/10">
-        <IoMailUnreadOutline className="h-8 w-8 text-accent" />
+    <div className="w-full max-w-sm mx-auto text-center flex flex-col items-center px-4">
+      <div className="mx-auto mb-3 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-[#c27850]/12">
+        <IoMdMailUnread className="text-[#c27850] h-6 w-6 sm:h-8 sm:w-8" />
       </div>
 
-      <h1 className="font-serif text-[24px] font-semibold tracking-[-0.01em] text-fg">
-        Check your email
+      <h1 className="text-[22px] sm:text-[24px] font-bold tracking-[-0.01em] text-fg">
+        {verificationType === "forget-password"
+          ? "Reset your password"
+          : "Check your email"}
       </h1>
-      <p className="mx-auto mt-2 max-w-[50ch] text-[15px] leading-relaxed text-muted">
-        We sent a 6-digit verification code to <span className="font-medium text-fg">{email}</span>. Enter it below to continue.
+      <p className="mx-auto mt-1 text-[14px] sm:text-[15px] text-muted">
+        We sent a 6-digit code to{" "}
+        <span className="font-medium text-fg break-all">{emailFromQuery}</span>.
+        Enter it below to continue.
       </p>
 
-      <form onSubmit={handleFormSubmit} className="mt-8 space-y-6">
-        <div className="flex justify-center gap-2.5">
+      {/* ============================== */}
+      {/* OTP Input Form (Responsive & Accessible) */}
+      {/* ============================== */}
+      <form
+        onSubmit={handleFormSubmit}
+        className="mt-6 sm:mt-8 space-y-6 flex flex-col items-center w-full"
+      >
+        <div className="flex justify-center gap-1.5 sm:gap-2.5 w-full">
           {digits.map((digit, index) => (
             <input
               key={index}
-              ref={(el) => {
-                inputRefs.current[index] = el;
-              }}
+              id={`otp-input-${index}`}
               type="text"
               maxLength={1}
               inputMode="numeric"
@@ -129,35 +316,76 @@ export function OtpVerificationForm({
               onChange={(e) => handleDigitChange(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(index, e)}
               onPaste={handlePaste}
-              className="h-13 w-13 rounded-[10px] border border-border bg-surface text-center font-mono text-[22px] text-fg transition-all duration-150 focus:border-accent focus:outline-none focus:ring-3 focus:ring-[#c27850]/15"
+              className="h-10.5 w-10.5 sm:h-13 sm:w-13 rounded-[10px] border border-border bg-surface text-center text-[18px] sm:text-[22px] text-fg transition-all duration-150 focus:border-accent focus:outline-none focus:ring-3 focus:ring-[#c27850]/15"
             />
           ))}
         </div>
 
-        {errorMessage && (
-          <p className="text-xs text-red-600">{errorMessage}</p>
-        )}
+        {errorMessage && <p className="text-xs text-red-600">{errorMessage}</p>}
 
         <button
           type="submit"
           disabled={loading}
           className="inline-flex w-full items-center justify-center gap-2 rounded-[10px] bg-accent px-5 py-3 text-[15px] font-medium tracking-[-0.005em] text-white transition-all hover:bg-[#a0522d] active:translate-y-[1px] disabled:opacity-60 cursor-pointer"
         >
-          {loading ? "Verifying..." : "Verify Email"}
+          {loading
+            ? "Verifying..."
+            : verificationType === "forget-password"
+              ? "Verify Code"
+              : "Verify Email"}
         </button>
       </form>
 
-      <p className="mt-5 text-[14px] text-muted">
-        Didn&apos;t receive the code?{" "}
-        <a
+      {/* ============================= */}
+      {/* Timer Display 5min (Persistent) */}
+      {/* ============================= */}
+      <div className="mt-4 text-[13px] text-muted">
+        {timeLeft > 0 ? (
+          <span>
+            Code expires in{" "}
+            <span className="font-medium text-fg">{formatTime(timeLeft)}</span>
+          </span>
+        ) : (
+          <span className="text-red-500 font-medium">
+            Code has expired. Please request a new code.
+          </span>
+        )}
+      </div>
+
+      {/* ============================== */}
+      {/* Resend Code Features */}
+      {/* ============================== */}
+      <div className="mt-3 flex items-center justify-center gap-1.5 text-[14px] text-muted">
+        <p>Didn&apos;t receive the code?</p>
+        <Link
           href="#"
           onClick={handleResendClick}
-          className="font-medium text-accent hover:underline"
+          className="font-medium text-accent underline cursor-pointer"
         >
           Resend
-        </a>
-      </p>
-
+        </Link>
+      </div>
     </div>
+  );
+}
+
+// Main component for the OTP verification form
+export function OtpVerificationForm(props: ExtendedOtpVerificationFormProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className="text-center py-8 text-muted">
+          Loading verification...
+        </div>
+      }
+    >
+      <OtpFormContent
+        defaultEmail={props.email}
+        onSubmitOtp={props.onSubmitOtp}
+        onResend={props.onResend}
+        externalLoading={props.loading}
+        verificationType={props.verificationType}
+      />
+    </Suspense>
   );
 }

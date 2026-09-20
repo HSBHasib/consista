@@ -7,15 +7,14 @@ import { PasswordInput } from "@/components/auth/PasswordInput";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 import { useState } from "react";
 import { toast } from "@/utils/toast";
-import { apiClient, handleApiError } from "@/lib/api";
 import { LoginFormData } from "@/types/auth.types";
+import { authClient } from "@/lib/auth-client";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function SigninForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-   
 
   const {
     register,
@@ -25,26 +24,17 @@ export function SigninForm() {
     mode: "onChange",
   });
 
-  const onSubmit = async (data: LoginFormData) => {
-    if (!emailRegex.test(data.email)) {
+  const onSubmit = async (SingInData: LoginFormData) => {
+    if (!emailRegex.test(SingInData.email)) {
       toast.error("Please provide a valid email address to sign in.");
       return;
     }
 
     setLoading(true);
-    try {
-      await apiClient.post("/auth/login", {
-        email: data.email,
-        password: data.password,
-      });
 
-      toast.success("Welcome back to Consista! Let's build consistency together.");
-      router.push("/dashboard");
-    } catch (error) {
-      handleApiError(error, "The email or password you entered is incorrect. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+
+
+
   };
 
   return (

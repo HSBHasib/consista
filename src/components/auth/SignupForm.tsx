@@ -9,6 +9,7 @@ import { useState } from "react";
 import { toast } from "@/utils/toast";
 import { RegisterFormData } from "@/types/auth.types";
 import { MdDoneAll } from "react-icons/md";
+import { authClient } from "@/lib/auth-client";
 
 const nameRegex = /^[A-Za-z]+$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -35,7 +36,6 @@ export function SignupForm() {
     defaultValue: "",
   });
 
-
   // =============================
   // Password Criteria
   // =============================
@@ -47,30 +47,64 @@ export function SignupForm() {
     { label: "Special char", valid: /[^A-Za-z0-9]/.test(passwordValue) },
   ];
 
-
   // ============================
   // Form Submission
   // ============================
-  const onSubmit = async (data: RegisterFormData) => {
-    if (!nameRegex.test(data.firstName) || data.firstName.length < 3) {
-      toast.error("First name should contain only letters and be at least 3 characters long.");
+  const onSubmit = async (signUpData: RegisterFormData) => {
+    if (
+      !nameRegex.test(signUpData.firstName) ||
+      signUpData.firstName.length < 3
+    ) {
+      toast.error(
+        "First name should contain only letters and be at least 3 characters long.",
+      );
       return;
     }
-    if (!nameRegex.test(data.lastName) || data.lastName.length < 3) {
-      toast.error("Last name should contain only letters and be at least 3 characters long.");
+    if (
+      !nameRegex.test(signUpData.lastName) ||
+      signUpData.lastName.length < 3
+    ) {
+      toast.error(
+        "Last name should contain only letters and be at least 3 characters long.",
+      );
       return;
     }
-    if (!emailRegex.test(data.email)) {
+    if (!emailRegex.test(signUpData.email)) {
       toast.error("Please provide a valid email address to continue.");
       return;
     }
     if (!passwordCriteria.every((c) => c.valid)) {
-      toast.error("Your password must meet all the listed requirements for your security.");
+      toast.error(
+        "Your password must meet all the listed requirements for your security.",
+      );
       return;
     }
 
-    console.log("Signup Data: ", data);
 
+    // Call the authentication client to sign up the user — (BetterAuth)
+    const { data, error } = await authClient.signUp.email({
+      name: signUpData.firstName + " " + signUpData.lastName,
+      email: signUpData.email,
+      password: signUpData.password,
+    });
+
+    if (error) {
+      toast.error(error.message || "Failed to create account.");
+      return;
+    }
+
+    if (data) {
+      // =========================
+      // Send OTP
+      // =========================
+      await authClient.emailOtp.sendVerificationOtp({
+        email: signUpData.email,
+        type: "email-verification",
+      });
+
+      toast.success("Account created! Please verify your Account.");
+      router.push(`/verify-otp?email=${encodeURIComponent(signUpData.email)}`);
+    }
   };
 
   return (
@@ -207,4 +241,3 @@ export function SignupForm() {
     </div>
   );
 }
-

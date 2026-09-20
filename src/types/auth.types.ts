@@ -15,7 +15,6 @@ export interface ForgotPasswordFormData {
 }
 
 export interface OtpVerificationFormData {
-  email: string;
   otp: string;
 }
 
@@ -39,3 +38,10 @@ export interface PasswordInputProps {
   registerOptions?: any;
 }
 
+
+export interface OtpVerificationFormProps {
+  email?: string;
+  onSubmitOtp?: (data: OtpVerificationFormData) => Promise<void> | void;
+  onResend?: () => Promise<void> | void;
+  loading?: boolean;
+}

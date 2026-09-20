@@ -196,7 +196,7 @@ export function Navbar() {
                     Sign In
                   </Button>
                 </Link>
-                <Link href="/signup">
+                <Link href="/sign-up">
                   <Button
                     variant="primary"
                     className="bg-accent/90 text-white rounded-xl"
