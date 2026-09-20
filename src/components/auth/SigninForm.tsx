@@ -24,6 +24,9 @@ export function SigninForm() {
     mode: "onChange",
   });
 
+  // ===================================
+  // Form Submission
+  // ===================================
   const onSubmit = async (SingInData: LoginFormData) => {
     if (!emailRegex.test(SingInData.email)) {
       toast.error("Please provide a valid email address to sign in.");
@@ -32,9 +35,29 @@ export function SigninForm() {
 
     setLoading(true);
 
+    try {
+      const { data, error } = await authClient.signIn.email({
+        email: SingInData.email,
+        password: SingInData.password,
+        rememberMe: true,
+      });
 
+      if (error) {
+        toast.error(error.message || "Invalid email or password.");
+        return;
+      }
 
-
+      if (data) {
+        toast.success("Signed in successfully!");
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 1000);
+      }
+    } catch (err) {
+      toast.error("An unexpected error occurred.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
