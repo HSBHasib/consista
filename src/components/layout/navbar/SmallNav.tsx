@@ -4,8 +4,8 @@ import Link from "next/link";
 import { HiOutlineXMark } from "react-icons/hi2";
 import { Button } from "@heroui/react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ThemeToggle } from "./Navbar";
 import { navLinks } from "@/data/landing.data";
+import { handleSignOut } from "@/utils/signOut";
 
 interface SmallNavProps {
   mobileOpen: boolean;
@@ -21,22 +21,7 @@ const SmallNav = ({
   closeMobile,
   session,
   pathname,
-  theme,
-  toggleTheme,
 }: SmallNavProps) => {
-  const handleSignOut = async () => {
-    closeMobile();
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/sign-out`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-    } catch {
-      // sign out even if request fails
-    }
-    window.location.href = "/";
-  };
 
   return (
     <AnimatePresence>

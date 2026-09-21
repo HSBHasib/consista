@@ -19,7 +19,7 @@ import {
   type MonthBar,
   type FooterColumn,
   type LeaderboardEntry,
-} from "@/types/landing.type";
+} from "@/types/landing/landing.type";
 
 export const navLinks: readonly NavLink[] = [
   { label: "Home", href: "/" },

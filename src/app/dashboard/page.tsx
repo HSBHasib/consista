@@ -1,11 +1,7 @@
-import React from 'react'
+const Dashboard = async () => {
 
-const Dashboard = () => {
-  return (
-    <div>
-      hi ji
-    </div>
-  )
-}
+  return <div>hi ji</div>;
+};
 
-export default Dashboard
+export default Dashboard;
+

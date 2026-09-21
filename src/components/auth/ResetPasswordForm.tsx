@@ -216,7 +216,7 @@ import { authClient } from "@/lib/auth-client";
 import {
   ResetPasswordFormData,
   ResetPasswordFormProps,
-} from "@/types/auth.types";
+} from "@/types/auth/auth.types";
 import { MdDoneAll } from "react-icons/md";
 import { PasswordInput } from "./PasswordInput";
 import { HiOutlineEye } from "react-icons/hi";

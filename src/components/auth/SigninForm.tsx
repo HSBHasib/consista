@@ -7,7 +7,7 @@ import { PasswordInput } from "@/components/auth/PasswordInput";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 import { useState } from "react";
 import { toast } from "@/utils/toast";
-import { LoginFormData } from "@/types/auth.types";
+import { LoginFormData } from "@/types/auth/auth.types";
 import { authClient } from "@/lib/auth-client";
 import { MotionDiv } from "@/components/motion/Motion-div";
 

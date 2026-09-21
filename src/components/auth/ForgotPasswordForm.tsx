@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
-import { ForgotPasswordFormData } from "@/types/auth.types";
+import { ForgotPasswordFormData } from "@/types/auth/auth.types";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "@/utils/toast";

@@ -9,7 +9,7 @@ import { IoMdMailUnread } from "react-icons/io";
 import {
   ExtendedOtpVerificationFormProps,
   OtpVerificationFormData,
-} from "@/types/auth.types";
+} from "@/types/auth/auth.types";
 import { MotionDiv } from "@/components/motion/Motion-div";
 
 function OtpFormContent({

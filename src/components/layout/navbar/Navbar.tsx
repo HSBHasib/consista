@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { HiOutlineBars3, HiOutlineCommandLine } from "react-icons/hi2";
 import { Button } from "@heroui/react";
@@ -9,6 +9,8 @@ import { useSession } from "@/lib/auth-client";
 import { navLinks } from "@/data/landing.data";
 import { motion } from "framer-motion";
 import SmallNav from "./SmallNav";
+import { handleSignOut } from "@/utils/signOut";
+import { getUser, getUserSession, getUserToken } from "@/lib/core/session.client";
 
 type Theme = "warm" | "light";
 
@@ -60,10 +62,13 @@ function getInitialTheme(): Theme {
 // Main Navbar Component
 // ============================
 export function Navbar() {
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
   const pathname = usePathname();
   const { data: session, isPending } = useSession();
+  console.log("user session: ", session);  
+
 
   // ===============================
   // Theme toggle function
@@ -91,19 +96,6 @@ export function Navbar() {
   }, [mobileOpen]);
 
   const closeMobile = () => setMobileOpen(false);
-
-  const handleSignOut = async () => {
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/sign-out`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-    } catch {
-      // sign out even if request fails
-    }
-    window.location.href = "/";
-  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-parchment/80 backdrop-blur-md">

@@ -7,7 +7,7 @@ import { PasswordInput } from "@/components/auth/PasswordInput";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 import { useState } from "react";
 import { toast } from "@/utils/toast";
-import { RegisterFormData } from "@/types/auth.types";
+import { RegisterFormData } from "@/types/auth/auth.types";
 import { MdDoneAll } from "react-icons/md";
 import { authClient } from "@/lib/auth-client";
 
