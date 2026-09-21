@@ -5,7 +5,7 @@ import { Button } from "@heroui/react";
 import { motion } from "framer-motion";
 import { MotionDiv } from "@/components/motion/Motion-div";
 import { heroData, dashboardMockData } from "@/data/landing.data";
-import { getDynamicDashboardData } from "@/utils/dashboard";
+import { getDynamicDashboardData } from "@/utils/landing.hero.section";
 
 const titleWords = heroData.title.split(" ");
 

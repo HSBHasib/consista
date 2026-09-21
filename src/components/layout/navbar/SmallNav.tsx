@@ -14,6 +14,7 @@ interface SmallNavProps {
   pathname: string;
   theme: "warm" | "light";
   toggleTheme: () => void;
+  showDashboard: boolean;
 }
 
 const SmallNav = ({
@@ -21,9 +22,12 @@ const SmallNav = ({
   closeMobile,
   session,
   pathname,
+  theme,
+  toggleTheme,
+  showDashboard,
 }: SmallNavProps) => {
 
-  return (
+  return ( 
     <AnimatePresence>
       {mobileOpen && (
         <>
@@ -80,7 +84,7 @@ const SmallNav = ({
                     </Link>
                   );
                 })}
-                {session && (
+                {session && showDashboard && (
                   <Link
                     href="/dashboard"
                     onClick={closeMobile}

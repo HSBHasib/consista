@@ -10,7 +10,6 @@ import { navLinks } from "@/data/landing.data";
 import { motion } from "framer-motion";
 import SmallNav from "./SmallNav";
 import { handleSignOut } from "@/utils/signOut";
-import { getUser, getUserSession, getUserToken } from "@/lib/core/session.client";
 
 type Theme = "warm" | "light";
 
@@ -62,12 +61,17 @@ function getInitialTheme(): Theme {
 // Main Navbar Component
 // ============================
 export function Navbar() {
-  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
   const pathname = usePathname();
-  const { data: session, isPending } = useSession();
-  console.log("user session: ", session);  
+  
+  // User Data
+  const { data: session, isPending } = useSession(); 
+
+  // User Role
+  const role = (session?.user as unknown as { role?: string })?.role || "USER" || "ADMIN";
+  const showDashboard = role === "USER" || role === "ADMIN";
+
 
 
   // ===============================
@@ -141,7 +145,7 @@ export function Navbar() {
                     </li>
                   );
                 })}
-            {!isPending && session && (
+            {!isPending && session && showDashboard && (
               <li>
                 <Link
                   href="/dashboard"
@@ -225,6 +229,7 @@ export function Navbar() {
         pathname={pathname}
         theme={theme}
         toggleTheme={toggleTheme}
+        showDashboard={showDashboard}
       />
     </header>
   );

@@ -7,7 +7,7 @@ import { BehavioralInsightsSection } from "@/components/landing/BehavioralInsigh
 import { TimeHorizonsSection } from "@/components/landing/TimeHorizons.section";
 import { YearlyReportSection } from "@/components/landing/YearlyReport.section";
 import { ProgressMilestoneSection } from "@/components/landing/ProgressMilestone.section";
-import { Footer } from "@/components/layout/Footer.section";
+import { Footer } from "@/components/layout/footer/Footer.section";
 
 export default function Home() {
   return (

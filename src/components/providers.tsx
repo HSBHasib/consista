@@ -2,7 +2,7 @@
 
 import { useEffect, type ReactNode } from "react";
 import { GoeyToaster } from "goey-toast";
-import { getUserFullData, syncSessionToCookies } from "@/utils/auth-helpers.utils";
+import { getClientUserFullData, syncSessionToCookies } from "@/utils/auth-helpers.utils";
 
 interface ProvidersProps {
   readonly children: ReactNode;
@@ -11,7 +11,7 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   useEffect(() => {
       async function sync() {
-        const fullData = await getUserFullData();
+        const fullData = await getClientUserFullData();
         syncSessionToCookies(fullData);
       }
       sync();

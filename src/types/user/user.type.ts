@@ -4,10 +4,15 @@ export interface AuthUser {
   email: string;
   emailVerified: boolean;
   image: string | null;
-  role: string;
+  role?: string;
   timezone: string;
   createdAt: Date | string;
   updatedAt: Date | string;
+}
+
+export interface UserProfileData extends AuthUser {
+  currentStreak: number;
+  longestStreak: number;
 }
 
 export interface AuthSessionData {
@@ -22,6 +27,6 @@ export interface AuthSessionData {
 }
 
 export interface FullSession {
-  user: AuthUser;
   session: AuthSessionData;
+  user: AuthUser;
 }

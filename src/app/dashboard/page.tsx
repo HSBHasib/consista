@@ -1,7 +1,9 @@
 const Dashboard = async () => {
-
-  return <div>hi ji</div>;
+  return (
+    <div>
+      This is Dashboard
+    </div>
+  )
 };
 
 export default Dashboard;
-

@@ -1,10 +1,10 @@
 import { authClient } from "@/lib/auth-client"; 
-import { AuthSessionData, AuthUser, FullSession } from "@/types/user/User.type";
+import { AuthSessionData, AuthUser, FullSession } from "@/types/user/user.type";
 
 // ———————————————————————————————————— 
 // User Full Data with Session
 // ————————————————————————————————————
-export const getUserFullData = async (): Promise<FullSession | null> => {
+export const getClientUserFullData = async (): Promise<FullSession | null> => {
   const { data } = await authClient.getSession();
   return (data as FullSession) || null;
 };
@@ -13,8 +13,8 @@ export const getUserFullData = async (): Promise<FullSession | null> => {
 // ———————————————————————————————————— 
 // User Data
 // ———————————————————————————————————— 
-export const getUser = async (): Promise<AuthUser | null> => {
-  const session = await getUserFullData();
+export const getClientUser = async (): Promise<AuthUser | null> => {
+  const session = await getClientUserFullData();
   return session?.user || null;
 };
 
@@ -22,8 +22,8 @@ export const getUser = async (): Promise<AuthUser | null> => {
 // ———————————————————————————————————— 
 // User Session
 // ———————————————————————————————————— 
-export const getUserSession = async (): Promise<AuthSessionData | null> => {
-  const session = await getUserFullData();
+export const getClientSession = async (): Promise<AuthSessionData | null> => {
+  const session = await getClientUserFullData();
   return session?.session || null;
 };
 
@@ -31,8 +31,8 @@ export const getUserSession = async (): Promise<AuthSessionData | null> => {
 // ———————————————————————————————————— 
 // User Token
 // ———————————————————————————————————— 
-export const getUserToken = async (): Promise<string | null> => {
-  const session = await getUserFullData();
+export const getClientToken = async (): Promise<string | null> => {
+  const session = await getClientUserFullData();
   return session?.session?.token || null;
 };
 
