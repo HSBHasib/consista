@@ -125,7 +125,7 @@ export function YearlyReportSection() {
                   <motion.div
                     key={bar.label}
                     variants={barItem}
-                    whileHover={{ scale: 1.04, y: -2 }}
+                    whileHover={{ scale: 1.05 }}
                     className="cursor-pointer"
                     style={{ transformOrigin: "bottom" }}
                   >

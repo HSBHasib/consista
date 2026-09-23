@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { HiOutlineBars3, HiOutlineCommandLine } from "react-icons/hi2";
 import { Button } from "@heroui/react";

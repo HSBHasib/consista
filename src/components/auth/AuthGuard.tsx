@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 
 interface AuthGuardProps {
@@ -11,9 +11,14 @@ interface AuthGuardProps {
 export function AuthGuard({ children }: AuthGuardProps) {
   const router = useRouter();
   const { data: session, isPending } = useSession();
+  const userRole = (session?.user as unknown as { role?: string })?.role;
+
+  // if(userRole !== "USER" || userRole !== "ADMIN") {
+  //   redirect("/unauthorized");
+  // }
 
   useEffect(() => {
-    if (session) {
+    if (userRole) {
       router.push("/dashboard");
     }
   }, [session, isPending, router]);

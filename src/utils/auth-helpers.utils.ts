@@ -1,5 +1,5 @@
 import { authClient } from "@/lib/auth-client"; 
-import { AuthSessionData, AuthUser, FullSession } from "@/types/user/user.type";
+import { AuthSessionData, AuthUser, FullSession } from "@/types/user/User.type";
 
 // ———————————————————————————————————— 
 // User Full Data with Session
